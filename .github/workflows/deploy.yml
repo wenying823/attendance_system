@@ -21,6 +21,9 @@ jobs:
       - name: Build with Maven
         run: ./mvnw clean package -DskipTests
 
+      - name: List files in target directory
+        run: ls -l target/
+
       - name: Upload WAR file as artifact
         uses: actions/upload-artifact@v3
         with:
