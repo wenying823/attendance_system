@@ -9,27 +9,24 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      # Step 1: Checkout the repository
       - name: Checkout repository
         uses: actions/checkout@v3
 
+      # Step 2: Set up JDK 17
       - name: Set up JDK 17
         uses: actions/setup-java@v3
         with:
           java-version: '17'
           distribution: 'temurin'
 
+      # Step 3: Build the project with Maven (skip tests)
       - name: Build with Maven
         run: ./mvnw clean package -DskipTests
 
-      - name: List files in target directory
-        run: ls -l target/
-
+      # Step 4: Upload WAR file as artifact
       - name: Upload WAR file as artifact
         uses: actions/upload-artifact@v3
         with:
           name: springboot-war
-          path: target/*.war
-
-      - name: Deploy WAR to Wildfly
-        run: |
-          curl -u ${{ secrets.todd }}:${{ secrets.wenying0823 }} -X POST --data-binary @target/your-app.war http://wildfly-server:9990
+          path: target/*.war  # 確保 WAR 檔案存在於 target 目錄中
