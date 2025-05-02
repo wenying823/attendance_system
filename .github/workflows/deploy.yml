@@ -27,23 +27,6 @@ jobs:
           name: springboot-war
           path: target/*.war
 
-  deploy:
-    runs-on: ubuntu-latest
-    needs: build
-    steps:
-      - name: Download WAR file
-        uses: actions/download-artifact@v3
-        with:
-          name: springboot-war
-          path: ./target
-
       - name: Deploy WAR to Wildfly
-        env:
-          WILDFLY_HOST: ${{ secrets.localhost }}
-          WILDFLY_PORT: ${{ secrets.9990 }}
-          WILDFLY_USER: ${{ secrets.todd }}
-          WILDFLY_PASSWORD: ${{ secrets.wenying0823 }}
         run: |
-          curl --insecure --user $WILDFLY_USER:$WILDFLY_PASSWORD \
-          --upload-file ./target/*.war \
-          http://$WILDFLY_HOST:$WILDFLY_PORT/management/webauthn/deploy
+          curl -u ${{ secrets.todd }}:${{ secrets.wenying0823 }} -X POST --data-binary @target/your-app.war http://wildfly-server:9990
